@@ -10,9 +10,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from AddMovie import Ui_enterMovieWindow
+from showMovies import Ui_showMovies
 import time
 import storageManager as database
-
+from movieDetailsTree import MovieDetailsWindowTree
 class Ui_mainAppWindow(object):
     def setupUi(self, mainAppWindow):
         mainAppWindow.setObjectName("mainAppWindow")
@@ -22,11 +23,11 @@ class Ui_mainAppWindow(object):
         self.createMovie = QtWidgets.QPushButton(self.centralwidget, clicked=lambda : self.onclickCreateMovie())
         self.createMovie.setGeometry(QtCore.QRect(0, 0, 241, 81))
         self.createMovie.setObjectName("createMovie")
-        self.removeMovie = QtWidgets.QPushButton(self.centralwidget)
-        self.removeMovie.setGeometry(QtCore.QRect(0, 80, 241, 91))
-        self.removeMovie.setObjectName("removeMovie")
-        self.showAllMovies = QtWidgets.QPushButton(self.centralwidget)
-        self.showAllMovies.setGeometry(QtCore.QRect(0, 170, 241, 91))
+        # self.removeMovie = QtWidgets.QPushButton(self.centralwidget)
+        # self.removeMovie.setGeometry(QtCore.QRect(0, 80, 241, 91))
+        # self.removeMovie.setObjectName("removeMovie")
+        self.showAllMovies = QtWidgets.QPushButton(self.centralwidget, clicked=lambda : self.onclickShowAllMovies())
+        self.showAllMovies.setGeometry(QtCore.QRect(0, 80, 241, 91))
         self.showAllMovies.setObjectName("showAllMovies")
         mainAppWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainAppWindow)
@@ -40,7 +41,7 @@ class Ui_mainAppWindow(object):
         _translate = QtCore.QCoreApplication.translate
         mainAppWindow.setWindowTitle(_translate("mainAppWindow", "MainWindow"))
         self.createMovie.setText(_translate("mainAppWindow", "Create New Movie"))
-        self.removeMovie.setText(_translate("mainAppWindow", "Remove A Movie"))
+        # self.removeMovie.setText(_translate("mainAppWindow", "Remove A Movie"))
         self.showAllMovies.setText(_translate("mainAppWindow", "Show All Movies"))
 
     def onclickCreateMovie(self):
@@ -49,6 +50,12 @@ class Ui_mainAppWindow(object):
         self.createMovieui.setupUi(self.createMovieWindow)
         self.createMovieWindow.show()
         database.clearTemp()
+
+    def onclickShowAllMovies(self):
+        
+        self.showAllui =  MovieDetailsWindowTree()
+        self.showAllui.show()
+        
 
 
 
