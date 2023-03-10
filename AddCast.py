@@ -28,7 +28,7 @@ Store = {"movie" : {
 from PyQt5 import QtCore, QtGui, QtWidgets
 from DialogAdd import Ui_MainWindow
 import storageManager as database
-
+from EmptyInputPopUp import Ui_Dialog
 
 
 class Ui_AddCastWindow(object):
@@ -61,7 +61,7 @@ class Ui_AddCastWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.centralwidget , clicked = lambda: self.onClickAddDialogue())
         self.pushButton.setGeometry(QtCore.QRect(20, 90, 451, 41))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.saveExit(AddCastWindow))
         self.pushButton_2.setGeometry(QtCore.QRect(160, 140, 181, 31))
         self.pushButton_2.setObjectName("pushButton_2")
         AddCastWindow.setCentralWidget(self.centralwidget)
@@ -83,29 +83,69 @@ class Ui_AddCastWindow(object):
         self.pushButton_2.setText(_translate("AddCastWindow", "Save Cast / Dialogue Data"))
 
     def onClickAddDialogue(self):
-        storage = database.get_cast_json()
-        self.cast_name_ = self.CastNameInput.text()
-        self.cast_character_ = self.CastCharacterInput.text()
-        self.cast_gender_ = self.CastGenderInput.text()
 
-        if storage == {} :
+        def openDialogueWin(self):
+            self.dialogwindow = QtWidgets.QMainWindow()
+            self.DialogueUi = Ui_MainWindow()
+            self.DialogueUi.setupUi(self.dialogwindow)
+            self.dialogwindow.show()
+
+        storage = database.get_cast_json()
+        self.cast_name_ = self.CastNameInput.text().strip()
+        self.cast_character_ = self.CastCharacterInput.text().strip()
+        self.cast_gender_ = self.CastGenderInput.text().strip()
+
+        if  (self.cast_name_ not in storage) and self.cast_name_ != "" and self.cast_character_ != "" and self.cast_gender_ != "":
             self.storage[self.cast_name_] = {}
             self.storage[self.cast_name_]["gender"] = self.cast_gender_
             self.storage[self.cast_name_]["character"] = self.cast_character_
             self.storage[self.cast_name_]["dialogue"] = {}
             database.dump_cast(self.storage)
-        else :
+            database.clear_dialogue_store()
+            openDialogueWin(self)
+
+        elif self.cast_name_ != "" and self.cast_character_ != "" and self.cast_gender_ != "" :
             database.append_dialogue_to_cast(self.cast_name_)
+            database.clear_dialogue_store()
+            openDialogueWin(self)
+        
+        else :
+            self.window = QtWidgets.QMainWindow()
+            self.errorUi = Ui_Dialog()
+            self.errorUi.setupUi(self.window)
+            self.window.show()
+
+        
+
+    def saveExit(self, Mainwindow):
+        storage = database.get_cast_json()
+        self.cast_name_ = self.CastNameInput.text().strip()
+        self.cast_character_ = self.CastCharacterInput.text().strip()
+        self.cast_gender_ = self.CastGenderInput.text().strip()
+        if (self.cast_name_ not in storage) and self.cast_name_ != "" and self.cast_character_ != "" and self.cast_gender_ != "":
+            self.storage[self.cast_name_] = {}
+            self.storage[self.cast_name_]["gender"] = self.cast_gender_
+            self.storage[self.cast_name_]["character"] = self.cast_character_
+            self.storage[self.cast_name_]["dialogue"] = {}
+            database.dump_cast(self.storage)
+            database.clear_dialogue_store()
+            self.storage.clear()
+            Mainwindow.close()
+        
+        elif self.cast_name_ != "" and self.cast_character_ != "" and self.cast_gender_ != "" :
+            database.append_dialogue_to_cast(self.cast_name_)
+            database.clear_dialogue_store()
+            self.storage.clear()
+            Mainwindow.close()
+
+        else :
+            self.window = QtWidgets.QMainWindow()
+            self.errorUi = Ui_Dialog()
+            self.errorUi.setupUi(self.window)
+            self.window.show()
 
 
-        self.dialogwindow = QtWidgets.QMainWindow()
-        self.DialogueUi = Ui_MainWindow()
-        self.DialogueUi.setupUi(self.dialogwindow)
-        self.dialogwindow.show()
-
-    def handleData(self, storage):
-        pass
-
+        
 
 
 if __name__ == "__main__":

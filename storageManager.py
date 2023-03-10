@@ -2,6 +2,16 @@ import  json
 
 
 
+def clearTemp():
+    with open("temp_movie.json", "w") as file :
+        json.dump({}, file, indent=4)
+    with open("temp_cast.json", "w") as file :
+        json.dump({}, file, indent=4)
+    with open("temp_dialogue.json", "w") as file :
+        json.dump({}, file, indent=4)
+    print("temp files are cleared, ready to play !!!")
+
+
 ##########  movie ##############
 # temp_movie.json file handaling functions 
 def dump_movie(data):
@@ -23,6 +33,11 @@ def append_cast_to_movie(movie_name):
     with open("temp_movie.json", 'w') as file:
         json.dump(movie_data, file, indent=4)
     return True
+
+
+def clear_movie_store():
+    with open("temp_movie.json", "w") as file :
+        json.dump({}, file, indent=4)
 
 
 
@@ -48,6 +63,10 @@ def append_dialogue_to_cast(name):
         json.dump(cast_data, file, indent=4)
     return True
 
+def clear_cast_store():
+    with open("temp_cast.json", "w") as file :
+        json.dump({}, file, indent=4)
+
 
 
 
@@ -66,8 +85,9 @@ def get_dialogue_json():
         store = json.loads(file.read())
     return store
 
-
-
+def clear_dialogue_store():
+    with open("temp_dialogue.json", "w") as file :
+        json.dump({}, file, indent=4)
 
 
 
@@ -84,15 +104,13 @@ def get_storage():
         store = json.loads(f.read())
     return store
 
-def dump_storage(data):
-    with open("storage.json", 'r') as f:
-        store = json.loads(f.read())
-    i = 0
-    for i in store:
-        pass
-    store[i+1] = data
+def dump_storage():
+    store = get_storage()
+    data = get_movie_json()
+
+    store = { **store, **data }
 
     with open("storage.json", 'w') as f:
-        json.dumps(store, f, indent=4)
+        json.dump(store, f, indent=4)
 
     return 1

@@ -26,7 +26,7 @@ Store = {"movie" : {
 from PyQt5 import QtCore, QtGui, QtWidgets
 from AddCast import Ui_AddCastWindow
 import storageManager as database
-
+from EmptyInputPopUp import Ui_Dialog
 
 
 
@@ -50,7 +50,7 @@ class Ui_enterMovieWindow(object):
         self.AddCast = QtWidgets.QPushButton(self.centralwidget , clicked = lambda:self.onClickAddCast())
         self.AddCast.setGeometry(QtCore.QRect(30, 70, 391, 51))
         self.AddCast.setObjectName("AddCast")
-        self.SaveData = QtWidgets.QPushButton(self.centralwidget , clicked = lambda:self.saveExit() )
+        self.SaveData = QtWidgets.QPushButton(self.centralwidget , clicked = lambda:self.saveExit(enterMovieWindow) )
         self.SaveData.setGeometry(QtCore.QRect(30, 140, 101, 31))
         self.SaveData.setObjectName("SaveData")
         self.MovieDurationLabel = QtWidgets.QLabel(self.centralwidget)
@@ -82,25 +82,53 @@ class Ui_enterMovieWindow(object):
         self.MovieDurationInput.setDisplayFormat(_translate("enterMovieWindow", "HH:mm:ss"))
 
     def onClickAddCast(self):
+        print("movie storage --> ",self.storage)
+        def openCastWin(self):
+            self.window = QtWidgets.QMainWindow()
+            self.addCastUi = Ui_AddCastWindow()
+            self.addCastUi.setupUi(self.window)
+            self.window.show()
+
         storage = database.get_movie_json()
-        self.movie_name_ = self.movieNameInput.text()
-        self.duration_ = self.MovieDurationInput.text()
-        if storage == {}:
+        self.movie_name_ = self.movieNameInput.text().strip()
+        self.duration_ = self.MovieDurationInput.text().strip()
+        if (self.movie_name_ not in storage) and self.movie_name_ != "" and self.duration_ != "":
             self.storage[self.movie_name_] = {}
             self.storage[self.movie_name_]["duration"] = self.duration_
             self.storage[self.movie_name_]["casts"] = {}
             database.dump_movie(self.storage)
+            database.clear_cast_store()
+            openCastWin(self)
         
-        else:
+        elif self.movie_name_ != "" and self.duration_ != "":
             database.append_cast_to_movie(self.movie_name_)
+            database.clear_cast_store()
+            openCastWin(self)
 
-        self.window = QtWidgets.QMainWindow()
-        self.addCastUi = Ui_AddCastWindow()
-        self.addCastUi.setupUi(self.window)
-        self.window.show()
+        else :
+            self.window = QtWidgets.QMainWindow()
+            self.errorUi = Ui_Dialog()
+            self.errorUi.setupUi(self.window)
+            self.window.show()
     
-    def saveExit(self):
-        pass
+    def saveExit(self, MainWindow):
+        print("movie storage --> ",self.storage)
+        storage = database.get_movie_json()
+        self.duration_ = self.MovieDurationInput.text().strip()
+        self.movie_name_ = self.movieNameInput.text().strip()
+        if self.movie_name_ != "" and storage =={} :
+            self.storage[self.movie_name_] = {}
+            self.storage[self.movie_name_]["duration"] = self.duration_
+            self.storage[self.movie_name_]["casts"] = {}
+            database.dump_movie(self.storage)
+        if self.movie_name_ in storage:
+            database.append_cast_to_movie(self.movie_name_)
+        database.dump_storage()
+        self.storage.clear()
+        
+        MainWindow.close()
+        
+
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from AddMovie import Ui_enterMovieWindow
 import time
-
+import storageManager as database
 
 class Ui_mainAppWindow(object):
     def setupUi(self, mainAppWindow):
@@ -48,6 +48,7 @@ class Ui_mainAppWindow(object):
         self.createMovieui = Ui_enterMovieWindow()
         self.createMovieui.setupUi(self.createMovieWindow)
         self.createMovieWindow.show()
+        database.clearTemp()
 
 
 
@@ -57,6 +58,7 @@ class Ui_mainAppWindow(object):
 
 
 if __name__ == "__main__":
+    database.clearTemp()
     import sys
     app = QtWidgets.QApplication(sys.argv)
     mainAppWindow = QtWidgets.QMainWindow()

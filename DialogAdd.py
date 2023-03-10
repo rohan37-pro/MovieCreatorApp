@@ -73,7 +73,7 @@ class Ui_MainWindow(object):
         self.totimeEdit_2 = QtWidgets.QTimeEdit(self.centralwidget)
         self.totimeEdit_2.setGeometry(QtCore.QRect(190, 170, 118, 22))
         self.totimeEdit_2.setObjectName("totimeEdit_2")
-        self.save_dialogButton = QtWidgets.QPushButton(self.centralwidget, clicked=lambda : self.saveExit())
+        self.save_dialogButton = QtWidgets.QPushButton(self.centralwidget, clicked=lambda : self.saveExit(MainWindow))
         self.save_dialogButton.setGeometry(QtCore.QRect(190, 210, 201, 41))
         self.save_dialogButton.setObjectName("save_dialogButton")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -95,14 +95,18 @@ class Ui_MainWindow(object):
         self.save_dialogButton.setText(_translate("MainWindow", "Save Dialogue"))
 
 
-    def saveExit(self):
-        self.dialogue_ = self.dialogueinput.text()
-        self.from_ = self.fromtimeEdit.text()
-        self.to_ = self.totimeEdit_2.text()
-        self.storage[self.dialogue_] = {}
-        self.storage[self.dialogue_]["from"] = self.from_
-        self.storage[self.dialogue_]["to"] = self.to_
-        database.dump_dialogue(self.storage)
+    def saveExit(self, MainWindow):
+        self.dialogue_ = self.dialogueinput.toPlainText().strip()
+        self.from_ = self.fromtimeEdit.text().strip()
+        self.to_ = self.totimeEdit_2.text().strip()
+        if self.dialogue_ != "" and self.from_ != "" and self.to_ != "" :
+            self.storage[self.dialogue_] = {}
+            self.storage[self.dialogue_]["from"] = self.from_
+            self.storage[self.dialogue_]["to"] = self.to_
+            database.dump_dialogue(self.storage)
+
+        self.storage.clear()
+        MainWindow.close()
 
 
 
