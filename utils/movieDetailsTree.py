@@ -2,10 +2,12 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QTreeWidget, QTreeWidgetItem
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont
-
-
-import storageManager as database
 import pprint
+import sys
+import os
+parent_dir = os.path.abspath(os.path.join(os.getcwd(), '..'))
+sys.path.append(parent_dir)
+import storageManager as database
 
 
 

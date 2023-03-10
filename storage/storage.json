@@ -1,1 +1,60 @@
-{}
+{
+    "Avengers": {
+        "duration": "01:23:45",
+        "casts": {
+            "robert downey jr": {
+                "gender": "Male",
+                "character": "Iron Man",
+                "dialogue": {
+                    "I am the one who knocks !!!!": {
+                        "from": "00:01:34",
+                        "to": "00:01:35"
+                    },
+                    "yoo wassup?": {
+                        "from": "01:23:32",
+                        "to": "01:23:35"
+                    }
+                }
+            },
+            "Chris Evans": {
+                "gender": "Male",
+                "character": "Captain America",
+                "dialogue": {
+                    "America is the greatest country!!!!": {
+                        "from": "00:34:23",
+                        "to": "00:34:27"
+                    },
+                    "It is just a test man!!!!!": {
+                        "from": "00:00:02",
+                        "to": "00:00:09"
+                    }
+                }
+            },
+            "Parineeti chopra": {
+                "gender": "Female",
+                "character": "I dont Know",
+                "dialogue": {
+                    "I am an active feminist": {
+                        "from": "00:20:17",
+                        "to": "00:20:20"
+                    }
+                }
+            }
+        }
+    },
+    "Spider man": {
+        "duration": "02:34:25",
+        "casts": {
+            "Andrew Garfield": {
+                "gender": "Male",
+                "character": "Spider Man",
+                "dialogue": {
+                    "I can fly but with ropes I produce myself.": {
+                        "from": "00:21:34",
+                        "to": "00:21:37"
+                    }
+                }
+            }
+        }
+    }
+}

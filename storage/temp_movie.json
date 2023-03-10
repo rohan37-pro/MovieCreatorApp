@@ -1,28 +1,14 @@
 {
-    "movie name": {
-        "duration": "00:00:00",
+    "Spider man": {
+        "duration": "02:34:25",
         "casts": {
-            "cast 1": {
-                "gender": "male",
-                "character": "cast one",
+            "Andrew Garfield": {
+                "gender": "Male",
+                "character": "Spider Man",
                 "dialogue": {
-                    "this is cast1 dialogue 1": {
-                        "from": "00:00:00",
-                        "to": "00:00:00"
-                    },
-                    "cast 1 dialigue 2": {
-                        "from": "02:00:00",
-                        "to": "04:04:00"
-                    }
-                }
-            },
-            "cast 2": {
-                "gender": "Female",
-                "character": "cast 2",
-                "dialogue": {
-                    "cast 2 dialogue 1": {
-                        "from": "00:00:00",
-                        "to": "00:00:00"
+                    "I can fly but with ropes I produce myself.": {
+                        "from": "00:21:34",
+                        "to": "00:21:37"
                     }
                 }
             }
