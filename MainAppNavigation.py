@@ -12,7 +12,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from AddMovie import Ui_enterMovieWindow
 import time
 
-storage = {}
 
 class Ui_mainAppWindow(object):
     def setupUi(self, mainAppWindow):
@@ -47,7 +46,7 @@ class Ui_mainAppWindow(object):
     def onclickCreateMovie(self):
         self.createMovieWindow  = QtWidgets.QMainWindow()
         self.createMovieui = Ui_enterMovieWindow()
-        self.createMovieui.setupUi(self.createMovieWindow, storage = storage)
+        self.createMovieui.setupUi(self.createMovieWindow)
         self.createMovieWindow.show()
 
 

@@ -25,14 +25,15 @@ Store = {"movie" : {
 '''
 from PyQt5 import QtCore, QtGui, QtWidgets
 from AddCast import Ui_AddCastWindow
-import storage as database
+import storageManager as database
 
 
 
-storage = {}
 
 class Ui_enterMovieWindow(object):
-    def setupUi(self, enterMovieWindow, storage):
+    storage = {}
+    
+    def setupUi(self, enterMovieWindow):
         enterMovieWindow.setObjectName("enterMovieWindow")
         enterMovieWindow.resize(441, 223)
         self.centralwidget = QtWidgets.QWidget(enterMovieWindow)
@@ -46,13 +47,10 @@ class Ui_enterMovieWindow(object):
         self.movieNameInput = QtWidgets.QLineEdit(self.centralwidget)
         self.movieNameInput.setGeometry(QtCore.QRect(30, 30, 221, 21))
         self.movieNameInput.setObjectName("movieNameInput")
-        movie_name = self.movieNameInput.text()
-        storage[movie_name] = {}
         self.AddCast = QtWidgets.QPushButton(self.centralwidget , clicked = lambda:self.onClickAddCast())
         self.AddCast.setGeometry(QtCore.QRect(30, 70, 391, 51))
         self.AddCast.setObjectName("AddCast")
-
-        self.SaveData = QtWidgets.QPushButton(self.centralwidget , clicked = lambda:self.saveExit(storage) )
+        self.SaveData = QtWidgets.QPushButton(self.centralwidget , clicked = lambda:self.saveExit() )
         self.SaveData.setGeometry(QtCore.QRect(30, 140, 101, 31))
         self.SaveData.setObjectName("SaveData")
         self.MovieDurationLabel = QtWidgets.QLabel(self.centralwidget)
@@ -64,9 +62,6 @@ class Ui_enterMovieWindow(object):
         self.MovieDurationInput = QtWidgets.QTimeEdit(self.centralwidget)
         self.MovieDurationInput.setGeometry(QtCore.QRect(300, 30, 118, 22))
         self.MovieDurationInput.setObjectName("MovieDurationInput")
-        duration = self.MovieDurationInput.specialValueText()
-        storage[movie_name]["duration"] = duration
-        storage[movie_name]["casts"] = {}
         enterMovieWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(enterMovieWindow)
         self.statusbar.setObjectName("statusbar")
@@ -87,13 +82,25 @@ class Ui_enterMovieWindow(object):
         self.MovieDurationInput.setDisplayFormat(_translate("enterMovieWindow", "HH:mm:ss"))
 
     def onClickAddCast(self):
+        storage = database.get_movie_json()
+        self.movie_name_ = self.movieNameInput.text()
+        self.duration_ = self.MovieDurationInput.text()
+        if storage == {}:
+            self.storage[self.movie_name_] = {}
+            self.storage[self.movie_name_]["duration"] = self.duration_
+            self.storage[self.movie_name_]["casts"] = {}
+            database.dump_movie(self.storage)
+        
+        else:
+            database.append_cast_to_movie(self.movie_name_)
+
         self.window = QtWidgets.QMainWindow()
         self.addCastUi = Ui_AddCastWindow()
         self.addCastUi.setupUi(self.window)
         self.window.show()
     
-    def saveExit(self, storage):
-        database.dump(storage, self.sdf)
+    def saveExit(self):
+        pass
 
 
 if __name__ == "__main__":
@@ -101,6 +108,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     enterMovieWindow = QtWidgets.QMainWindow()
     ui = Ui_enterMovieWindow()
-    ui.setupUi(enterMovieWindow, storage=storage)
+    ui.setupUi(enterMovieWindow)
     enterMovieWindow.show()
     sys.exit(app.exec_())

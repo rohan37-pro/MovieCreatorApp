@@ -27,12 +27,14 @@ Store = {"movie" : {
 
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from AddCast import Ui_AddCastWindow 
-
+from PyQt5 import QtCore, QtGui, QtWidgets 
+import storageManager as database 
 
 
 class Ui_MainWindow(object):
+
+    storage = {}
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(605, 307)
@@ -71,7 +73,7 @@ class Ui_MainWindow(object):
         self.totimeEdit_2 = QtWidgets.QTimeEdit(self.centralwidget)
         self.totimeEdit_2.setGeometry(QtCore.QRect(190, 170, 118, 22))
         self.totimeEdit_2.setObjectName("totimeEdit_2")
-        self.save_dialogButton = QtWidgets.QPushButton(self.centralwidget)
+        self.save_dialogButton = QtWidgets.QPushButton(self.centralwidget, clicked=lambda : self.saveExit())
         self.save_dialogButton.setGeometry(QtCore.QRect(190, 210, 201, 41))
         self.save_dialogButton.setObjectName("save_dialogButton")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -94,19 +96,15 @@ class Ui_MainWindow(object):
 
 
     def saveExit(self):
-        obj = Ui_AddCastWindow()
-        storage = {}
-        dialogue = self.dialogueinput.text()
-        from_ = self.fromtimeEdit.specialValueText()
-        to_ = self.totimeEdit_2.specialValueText()
+        self.dialogue_ = self.dialogueinput.text()
+        self.from_ = self.fromtimeEdit.text()
+        self.to_ = self.totimeEdit_2.text()
+        self.storage[self.dialogue_] = {}
+        self.storage[self.dialogue_]["from"] = self.from_
+        self.storage[self.dialogue_]["to"] = self.to_
+        database.dump_dialogue(self.storage)
 
-        storage[dialogue] = {}
-        storage[dialogue]["from"] = from_
-        storage[dialogue]["to"] = to_
-        self.storage = storage
-        obj.handleData(storage)
-        print(f"dialogue storage --> {storage}")
-        self.exit()
+
 
 if __name__ == "__main__":
     import sys

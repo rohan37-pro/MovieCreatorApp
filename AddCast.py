@@ -13,7 +13,6 @@ Store = {"movie" : {
                 "casts" : { 
                     "riddhi" : {
                         "gender" : "male",
-                        "NAME" : "",
                         "character" :"" 
                         "dialog" : {
                             'fuck yoou' : { "from" : 0 , "to" : 0}
@@ -28,11 +27,15 @@ Store = {"movie" : {
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from DialogAdd import Ui_MainWindow
-stiragte["sot"] = {}
+import storageManager as database
+
+
+
 class Ui_AddCastWindow(object):
+
+    storage = {}
+
     def setupUi(self, AddCastWindow):
-        if self.storage == None:
-            self.storage = {}
         AddCastWindow.setObjectName("AddCastWindow")
         AddCastWindow.resize(489, 214)
         self.centralwidget = QtWidgets.QWidget(AddCastWindow)
@@ -80,25 +83,28 @@ class Ui_AddCastWindow(object):
         self.pushButton_2.setText(_translate("AddCastWindow", "Save Cast / Dialogue Data"))
 
     def onClickAddDialogue(self):
+        storage = database.get_cast_json()
+        self.cast_name_ = self.CastNameInput.text()
+        self.cast_character_ = self.CastCharacterInput.text()
+        self.cast_gender_ = self.CastGenderInput.text()
+
+        if storage == {} :
+            self.storage[self.cast_name_] = {}
+            self.storage[self.cast_name_]["gender"] = self.cast_gender_
+            self.storage[self.cast_name_]["character"] = self.cast_character_
+            self.storage[self.cast_name_]["dialogue"] = {}
+            database.dump_cast(self.storage)
+        else :
+            database.append_dialogue_to_cast(self.cast_name_)
+
+
         self.dialogwindow = QtWidgets.QMainWindow()
         self.DialogueUi = Ui_MainWindow()
         self.DialogueUi.setupUi(self.dialogwindow)
         self.dialogwindow.show()
 
     def handleData(self, storage):
-        print(f"dialogue --> {storage}")
-        cast_name = self.CastNameInput.text()
-        cast_character = self.CastCharacterInput.text()
-        cast_gender = self.CastGenderInput.text()
-        if cast_name not in self.storage.keys() :
-            self.storage[cast_name] = {}
-        self.storage[cast_name]["gender"] =cast_gender
-        self.storage[cast_name]["character"] =  cast_character
-        if self.storage[cast_name]["dialogue"] == None:
-            self.storage[cast_name]["dialogue"] = {}
-        prev_dialogues = self.storage[cast_name]["dialogue"]
-        self.storage[cast_name]["dialogue"] = {**prev_dialogues, **storage}
-        print("cast storage --> " ,self.storage)
+        pass
 
 
 
